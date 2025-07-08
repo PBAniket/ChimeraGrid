@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Upload Files</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 bg-dark-bg text-text-light overflow-x-hidden">
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="glass-box w-full max-w-2xl p-8 rounded-xl shadow-xl">
+    <h1 class="text-3xl font-bold text-center mb-6 text-text-light">Upload CSV or JSON Files</h1>
+    <p class="text-center mb-8 text-light">Drag and drop files here, or click to select files. You can select multiple files at once for batch transformation.</p>
+
+    <form id="glass-box">
+      <div id="drop-area" class="w-full h-64 flex flex-col items-center justify-center p-6 mb-8 text-white cursor-pointer border-2   rounded-lg">
+        <p class="text-lg font-semibold mb-2">Drag and drop files here</p>
+        <p class="text-sm">or click to select files</p>
+        <p id="file-list" class="mt-4 text-sm italic text-text-light"></p>
+        <input type="file" name="file" multiple required id="file-input" class="hidden">
+      </div>
+
+      <div class="text-center">
+        <button type="button" id="submit-btn" onclick="submitAccumulatedFiles()" class="submit-btn text-text-light px-8 py-3 rounded-lg text-lg font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-accent-purple focus:ring-opacity-75 transition-all duration-300">
+          Upload
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

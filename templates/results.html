@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Batch Transformation Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-dark-bg text-text-light p-4 md:p-8 overflow-x-hidden">
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="w-full max-w-4xl mx-auto relative z-10">
+    <h1 class="text-3xl font-bold text-center mb-8" >Final Results</h1>
+    <p class="text-center mb-8 text-white">The transformations have been applied. See the report and download link for each file below.</p>
+
+    {% for df_id, result in batch_results.items() %}
+      <div class="file-result-box glass-box border-2 file-result-box-border p-6 rounded-xl shadow-lg mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-white" style="text-shadow: 0 0 8px white;">File: {{ result.filename }}</h2>
+
+        {% if result.errors %}
+          <p class="text-error-red mb-4 font-semibold"><strong>Errors:</strong> {{ result.errors }}</p>
+        {% endif %}
+
+        <h4 class="text-xl font-medium mb-3 text-white">Successfully Transformed Columns</h4>
+
+        {% if result.successful_reports %}
+          <div class="space-y-4">
+            {% for col_name, report in result.successful_reports.items() %}
+              <div class="report-box glass-box border rounded-lg p-4">
+                <h3 class="text-lg font-semibold mb-2 text-white">Transformation Health Report: <span class="text-success-green">{{ col_name }}</span></h3>
+                <table class="report-table w-full text-white">
+                  <tr><th class="w-1/2">Metric</th><th>Result</th></tr>
+                  <tr><td>Success Rate</td><td>{{ report.success_rate }}</td></tr>
+                  <tr><td>Value Change Rate</td><td>{{ report.value_change_rate }}</td></tr>
+                  <tr><td>New Data Type</td><td>{{ report.new_data_type }}</td></tr>
+                  <tr><td>Null Values</td><td>{{ report.null_values }}</td></tr>
+                </table>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-white italic">No columns were successfully transformed.</p>
+        {% endif %}
+
+        <div class="mt-6 flex flex-wrap justify-center">
+          <a href="/download/{{ df_id }}/csv" class="download-btn csv-btn">Download CSV</a>
+          <a href="/download/{{ df_id }}/json" class="download-btn json-btn">Download JSON</a>
+        </div>
+      </div>
+    {% endfor %}
+
+    <hr class="border-t border-subtle my-8">
+    <div class="text-center">
+      <a href="/index" class="start-new-link text-xl">Start a New Batch Transformation</a>
+    </div>
+  </div>
+</body>
+</html>

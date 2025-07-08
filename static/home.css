@@ -1,0 +1,53 @@
+
+        .head{
+            display: flex;
+    align-items: center; 
+        }
+.image-gradient{
+    position: absolute;
+    right: 0;
+    top:0;
+    opacity: 0.5;
+    z-index: -1;
+}
+.layer-blur{
+    height: 0;
+    width: 30rem;
+    position: absolute;
+    top:20%;
+    right: 0;
+    box-shadow: 0 0 700px 15px white;
+    rotate: -30deg;
+    z-index: -1;
+}
+    body{
+        color: white;
+        background-color: #020206;
+        width: 100%;
+        overflow-x: hidden;
+    }
+    
+.para{
+    font-size: larger;
+    margin-left: 80px;
+    margin-top: 110px;
+    width: 60ch;
+}
+.robot{
+    position: absolute;
+    top: 0;
+    right: -22%;
+}
+#btn{
+    padding: 100px 10px;
+    position: absolute;
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 20px;
+    font-size: large;
+    margin-left: 80px;
+    
+}
+#btn:hover{
+    cursor: pointer;
+}

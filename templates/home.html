@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChimeraGrid</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <img class="image-gradient" src="{{ url_for('static', filename='gradient.png') }}" alt="...">
+        <div class="layer-blur"></div>
+        <div class="head">
+            <img src="{{ url_for('static', filename='chimeragrid_favicon-Photoroom.png') }}" width="100px" alt="logo">
+            <h1>ChimeraGrid</h1>
+        </div>
+    
+        <div class="para">
+            <h1 style="color: #A9A9A9;">Effortless Data Transformation</h1>
+            <p>
+                TabulaX instantly cleans, reshapes, and standardizes your messy tables with just a click.
+                Say goodbye to manual data wrangling and hello to seamless, automated transformations. 
+                Effortlessly unify scattered, inconsistent data into one clear, reliable format. 
+                Power your business decisions with fast, accurate, and beautifully structured tables.
+            </p>
+        </div>
+        <spline-viewer class="robot" url="https://prod.spline.design/e084NsmOTIYkGx7L/scene.splinecode"></spline-viewer>
+        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.92/build/spline-viewer.js"></script>
+    </div>
+    <a href="{{ url_for('transformer_entry') }}">
+        <button id="btn"> Get Started →</button>
+    </a>
+</body>
+</html>

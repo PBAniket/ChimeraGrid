@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Step 1: Select Columns</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class=" text-text-light p-4 md:p-8 overflow-x-hidden">
+
+  <!-- Fixed Spline Background -->
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="w-full max-w-4xl mx-auto relative z-10">
+    <h1 class="text-3xl font-bold text-center mb-8">Step 1: Select Columns for All Files</h1>
+    {% if error_message %}
+      <p class="text-center mb-6 error-message font-semibold"><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    <form method="post" action="/display_samples" class="space-y-8">
+      {% for df_id, data in files.items() %}
+        <div class="file-section glass-box border-2 file-section-border p-6 shadow-lg">
+          <h2 class="text-2xl font-semibold mb-4 text-white " style="text-shadow: 0 0 8px white;">File: {{ data.filename }}</h2>
+          <h3 class="text-xl font-medium mb-3 text-light">Data Preview (5 Rows)</h3>
+          <div class="overflow-x-auto rounded-lg mb-6">
+            {{ data.df.head().to_html(classes='dataframe', border=0) | safe }}
+          </div>
+          <h3 class="text-xl font-medium mb-4 text-gray-200">Select Columns to Transform</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {% for c in data.df.columns %}
+              <label class="flex items-center text-light cursor-pointer hover:text-accent-purple transition-colors duration-200">
+                <input type="checkbox" name="selected_columns_{{ df_id }}" value="{{ c }}" class="form-checkbox h-5 w-5 text-accent-purple rounded focus:ring-accent-purple">
+                <span class="ml-2 text-lg">{{ c }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="text-center mt-10">
+        <button type="submit" class="submit-btn text-text-light px-10 py-4 rounded-lg text-xl font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-accent-purple focus:ring-opacity-75 transition-all duration-300">
+          Show Samples
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-10">
+      <a href="/index" class="start-over-link text-lg font-medium">Start Over</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Step 4: Review Proposed Transformations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-dark-bg text-text-light p-4 md:p-8 overflow-x-hidden">
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="w-full max-w-4xl mx-auto relative z-10">
+    <h1 class="text-3xl font-bold text-center mb-8">Step 4: Review All Proposed Transformations</h1>
+
+    <form method="post" action="/process_transformation" class="space-y-8">
+      {% for df_id, review_items in review_data_by_file.items() %}
+        <div class="file-section glass-box border-2 file-section-border-step4 p-6 shadow-lg rounded-xl">
+          <h2 class="text-2xl font-semibold mb-4 text-white" style="text-shadow: 0 0 8px white;">File: {{ files[df_id].filename }}</h2>
+
+          {% if review_items %}
+            <div class="space-y-6">
+              {% for item in review_items %}
+              <div class="review-box border rounded-lg p-5">
+                <h3 class="text-xl font-medium mb-3 text-light">
+                  Column: <span class="text-accent-purple">{{ item.col_name }}</span>
+                </h3>
+                <p class="mb-2"><b>Transformation Type:</b> <span class="text-white font-semibold">{{ item.type }}</span></p>
+                <p class="mb-2"><b>LLM Generated Code:</b></p>
+
+                <pre class="bg-white/10 backdrop-blur-sm text-white overflow-x-auto text-sm rounded-md p-3 border border-white/20">
+<code class="text-white">{{ item.code }}</code></pre>
+
+                {% if item.input_method == 'prompt' %}
+                  <p class="mt-4 mb-2"><b>User-Provided Prompt:</b></p>
+                  <div class="prompt-block p-3 rounded-md italic text-white">"{{ item.prompt }}"</div>
+                  <p class="mt-2 text-sm text-gray-400">
+                    <i>(Generated using sample values like: <code class="px-1 rounded text-xs bg-white/10 backdrop-blur-sm">{{ item.samples[:3]|join(', ') }}{% if item.samples|length > 3 %}...{% endif %}</code>)</i>
+                  </p>
+                {% else %}
+                  <p class="mt-4 mb-2"><b>User-Provided Examples:</b></p>
+                  <ul class="list-disc list-inside text-white space-y-1">
+                    {% for s_val, t_val in item.examples %}
+                    <li>
+                      Source: <code class="px-1 rounded text-xs bg-white/10 backdrop-blur-sm">{{ s_val }}</code> 
+                      <span class="text-white">→</span> 
+                      Target: <code class="px-1 rounded text-xs bg-white/10 backdrop-blur-sm">{{ t_val }}</code>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-white italic">No transformations were defined for this file.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div class="text-center mt-10">
+        <button type="submit"
+          class="submit-btn-step4 px-12 py-5 rounded-lg text-2xl font-bold shadow-md focus:outline-none focus:ring-2 focus:ring-danger-red focus:ring-opacity-75 transition-all duration-300">
+          Confirm and Perform All Transformations
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-10">
+      <a href="/index" class="start-over-link text-lg font-medium">Start Over</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Step 2: Sample Values</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-dark-bg text-text-light p-4 md:p-8 overflow-x-hidden">
+
+  <!-- Spline Fullscreen Background -->
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="w-full max-w-4xl mx-auto relative z-10">
+    <h1 class="text-3xl font-bold text-center mb-8">Step 2: Review Sample Values</h1>
+    <p class="text-center mb-8 text-light">
+      Review the samples below. In the next step, you will provide target values or transformation prompts for them.
+    </p>
+
+    <form method="post" action="/provide_targets" class="space-y-8">
+      {% for df_id, samples_per_col in samples_by_file.items() %}
+        <div class="file-section glass-box border-2 file-section-border-step2 p-6 shadow-lg rounded-xl">
+          <h2 class="text-2xl font-semibold mb-4 text-file-section-border text-white" style="text-shadow: 0 0 8px white;">File: {{ files[df_id].filename }}</h2>
+
+          {% if samples_per_col %}
+            {% for col, vals in samples_per_col.items() %}
+              <div class="mb-6">
+                <h3 class="text-xl font-medium mb-2 text-gray-200">
+                  Column: <span class="text-accent-purple">{{ col }}</span>
+                </h3>
+                <ul class="list-disc list-inside space-y-1 text-light">
+                  {% for v in vals %}
+                    <li>
+                      <code class=" px-2 py-1 rounded text-sm">{{ v }}</code>
+                    </li>
+                  {% endfor %}
+                </ul>
+                <input type="hidden" name="samples_{{ df_id }}_{{ col|url_encode }}" value="{{ vals|join('|||')|url_encode }}">
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-gray-400 italic">No columns were selected for this file, or no samples found.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div class="text-center mt-10">
+        <button type="submit" class="submit-btn text-text-light px-10 py-4 rounded-lg text-xl font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-accent-purple focus:ring-opacity-75 transition-all duration-300">
+          Provide Target Values
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-10">
+      <a href="/index" class="start-over-link text-lg font-medium">Start Over</a>
+    </div>
+  </div>
+</body>
+</html>

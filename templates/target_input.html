@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabulaX - Step 3: Define Transformation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-dark-bg text-text-light p-4 md:p-8 overflow-x-hidden">
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.19/build/spline-viewer.js"></script>
+  <spline-viewer
+    class="fixed top-0 left-0 w-full h-full -z-10"
+    url="https://prod.spline.design/tyvUOkLiuDWLfsG1/scene.splinecode">
+  </spline-viewer>
+
+  <div class="w-full max-w-4xl mx-auto relative z-10">
+    <h1 class="text-3xl font-bold text-center mb-8">Step 3: Define Transformation</h1>
+    <p class="text-center mb-8 text-light">
+      For each column, choose to provide target value examples or a text prompt to generate the transformation.
+    </p>
+
+    <form method="post" action="/review_transformations" class="space-y-8">
+      {% for df_id, columns in columns_by_file.items() %}
+        <div class="file-section glass-box border-2 file-section-border-step3 p-6 shadow-lg rounded-xl">
+          <h2 class="text-2xl font-semibold mb-4 text-white " style="text-shadow: 0 0 8px white;">File: {{ files[df_id].filename }}</h2>
+
+          {% for col, s_vals in columns.items() %}
+            <div class="column-block border-t border-subtle pt-6 mt-6">
+              <h3 class="text-xl font-medium mb-4 text-gray-200">
+                Column: <span class="text-accent-purple">{{ col }}</span>
+              </h3>
+
+              <div class="input-mode-selector mb-4">
+                <label class="inline-flex items-center mr-6 font-semibold cursor-pointer">
+                  <input type="radio" name="input_mode_{{ df_id }}_{{ col|url_encode }}" value="examples" checked onchange="toggleInputMode(this, '{{ df_id }}', '{{ col|url_encode }}')" class="h-5 w-5 rounded">
+                  <span class="ml-2">Give Target Values</span>
+                </label>
+                <label class="inline-flex items-center font-semibold cursor-pointer">
+                  <input type="radio" name="input_mode_{{ df_id }}_{{ col|url_encode }}" value="prompt" onchange="toggleInputMode(this, '{{ df_id }}', '{{ col|url_encode }}')" class="h-5 w-5 rounded">
+                  <span class="ml-2">Give Prompt</span>
+                </label>
+              </div>
+
+              <div id="examples-container-{{ df_id }}-{{ col|url_encode }}" class="examples-container">
+                <ul class="space-y-3">
+                  {% for s_val in s_vals %}
+                  <li class="flex flex-wrap items-center">
+                    <span class="mr-2 text-gray-300">
+                      Source: <code class="bg-white/10 px-2 py-1 rounded text-sm backdrop-blur-sm">{{ s_val }}</code>
+                    </span>
+                    <span class="mr-2 text-white">Target:</span>
+                    <input type="text" name="target_val_{{ df_id }}_{{ col|url_encode }}_{{ loop.index0 }}"
+                      class="bg-gray-700 border border-subtle px-3 py-2 rounded-md text-sm text-text-light flex-grow max-w-sm focus:outline-none focus:border-accent-purple"
+                      placeholder="Enter target value">
+                    <input type="hidden" name="source_val_{{ df_id }}_{{ col|url_encode }}_{{ loop.index0 }}"
+                      value="{{ s_val|url_encode }}">
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div id="prompt-container-{{ df_id }}-{{ col|url_encode }}" class="prompt-container hidden mt-4">
+                <label for="prompt_text_{{ df_id }}_{{ col|url_encode }}" class="block text-white mb-2">
+                  Enter transformation prompt 
+                </label>
+                <textarea name="prompt_text_{{ df_id }}_{{ col|url_encode }}"
+                  class="w-full p-3 bg-gray-700 border border-subtle rounded-md text-text-light focus:outline-none focus:border-accent-purple resize-y min-h-[80px]"
+                  placeholder="Type your instruction here..."></textarea>
+                <input type="hidden" name="source_samples_{{ df_id }}_{{ col|url_encode }}"
+                  value="{{ s_vals|join('|||')|url_encode }}">
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="text-center mt-10">
+        <button type="submit"
+          class="submit-btn-step3 px-10 py-4 rounded-lg text-xl font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-warning-yellow focus:ring-opacity-75 transition-all duration-300">
+          Transform
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-10">
+      <a href="/index" class="start-over-link text-lg font-medium">Start Over</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('input[name^="input_mode_"]').forEach(radio => {
+        const parts = radio.name.split('_');
+        const dfId = parts[2];
+        const colNameEncoded = parts[3];
+        if (radio.checked) {
+          toggleInputMode(radio, dfId, colNameEncoded);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
