@@ -4,19 +4,15 @@
 
 ---
 
-## 🎥 Live Demo
-
-![TabulaX Demo](assets/demo.gif)
-
----
 
 ## 📸 Screenshots
 
 ### 🔹 Input Table
-![Input Table](assets/input_table.png)
+![Input Table](Screenshot%202025-07-14%20112516.png)
+
 
 ### 🔹 Generated Output
-![Output Function](assets/output_transformation.png)
+![Output Function](Screenshot%202025-07-14%20112551.png)
 
 ---
 
@@ -47,5 +43,7 @@
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/tabulax.git
-cd tabulax
+git clone https://github.com/PBAniket/ChimeraGrid.git
+cd ChimeraGrid
+pip install -r requirements.txt
+python app.py
