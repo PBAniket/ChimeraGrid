@@ -1,6 +1,6 @@
-# 🌟 TabulaX
+# 🌟 ChimeraGrid
 
-**TabulaX** is a web-based AI tool that automates multi-class table transformations using large language models (LLMs). With a user-friendly interface and powerful Gemini 1.5 Flash integration, it generates clean Python functions to transform your tabular data with just a few examples.
+**ChimeraGrid** is a web-based AI tool that automates multi-class table transformations using large language models (LLMs). With a user-friendly interface and powerful Gemini 1.5 Flash integration, it generates clean Python functions to transform your tabular data with just a few examples.
 
 ---
 
